@@ -1,48 +1,18 @@
 <view class="mine-page">
   <view class="user-card">
-    <image class="user-logo" src="/images/logo.jpg" mode="aspectFill"></image>
-
+    <view class="avatar-box">商</view>
     <view class="user-info">
-      <view class="nickname">微信用户</view>
-      <view class="role">乐然便利会员</view>
+      <view class="username">{{username}}</view>
+      <view class="desc">乐然便利商家后台</view>
     </view>
   </view>
 
-  <view class="menu-card">
-    <view class="menu-item" bindtap="goOrders">
-      <text>我的订单</text>
-      <text class="arrow">›</text>
-    </view>
-
-    <view wx:if="{{!merchantLoggedIn}}" class="menu-item" bindtap="goMerchantLogin">
-      <text>商家登录</text>
-      <text class="arrow">›</text>
-    </view>
-
-    <view wx:if="{{merchantLoggedIn}}" class="menu-item" bindtap="goMerchant">
-      <text>商家订单管理</text>
-      <text class="arrow">›</text>
-    </view>
-
-    <view wx:if="{{merchantLoggedIn}}" class="menu-item" bindtap="goMerchantProducts">
-      <text>商品管理</text>
-      <text class="arrow">›</text>
-    </view>
-
-    <view wx:if="{{merchantLoggedIn}}" class="menu-item" bindtap="logoutMerchant">
-      <text>退出商家登录</text>
-      <text class="arrow">›</text>
-    </view>
-
-    <view class="menu-item" bindtap="clearLocalData">
-      <text>清除本地缓存</text>
-      <text class="arrow">›</text>
-    </view>
-
-    <view class="menu-item" bindtap="showAbout">
-      <text>关于乐然便利</text>
-      <text class="arrow">›</text>
+  <view class="panel">
+    <view class="panel-item">
+      <text class="label">登录状态</text>
+      <text class="value">已登录</text>
     </view>
   </view>
-  
+
+  <button class="logout-btn" bindtap="logout">退出登录</button>
 </view>

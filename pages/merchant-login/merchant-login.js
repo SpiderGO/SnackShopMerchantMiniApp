@@ -43,7 +43,8 @@ Page({
         if (res.data.code === 0) {
           wx.setStorageSync('merchantLoggedIn', true);
           wx.setStorageSync('merchantToken', res.data.data.token);
-  
+          wx.setStorageSync('merchantUsername', res.data.data.username);
+          
           wx.showToast({
             title: '登录成功',
             icon: 'success'

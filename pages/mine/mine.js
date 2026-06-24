@@ -1,93 +1,80 @@
+const { BASE_URL } = require('../../utils/config');
+
 Page({
   data: {
-    merchantLoggedIn: false
+    username: ''
   },
 
   onShow() {
     const merchantLoggedIn = wx.getStorageSync('merchantLoggedIn') || false;
+    const merchantToken = wx.getStorageSync('merchantToken') || '';
+    const merchantUsername = wx.getStorageSync('merchantUsername') || '商家用户';
 
-    this.setData({
-      merchantLoggedIn
-    });
-  },
-
-  goOrders() {
-    wx.switchTab({
-      url: '/pages/orders/orders'
-    });
-  },
-
-  goMerchantLogin() {
-    wx.navigateTo({
-      url: '/pages/merchant-login/merchant-login'
-    });
-  },
-
-  goMerchant() {
-    if (!this.data.merchantLoggedIn) {
-      wx.showToast({
-        title: '请先商家登录',
-        icon: 'none'
+    if (!merchantLoggedIn || !merchantToken) {
+      wx.reLaunch({
+        url: '/pages/merchant-login/merchant-login'
       });
       return;
     }
 
-    wx.navigateTo({
-      url: '/pages/merchant/merchant'
-    });
-  },
-
-  goMerchantProducts() {
-    if (!this.data.merchantLoggedIn) {
-      wx.showToast({
-        title: '请先商家登录',
-        icon: 'none'
-      });
-      return;
-    }
-
-    wx.navigateTo({
-      url: '/pages/merchant-products/merchant-products'
-    });
-  },
-
-  logoutMerchant() {
-    wx.removeStorageSync('merchantLoggedIn');
-
     this.setData({
-      merchantLoggedIn: false
-    });
-
-    wx.showToast({
-      title: '已退出商家登录',
-      icon: 'success'
+      username: merchantUsername
     });
   },
 
-  clearLocalData() {
+  logout() {
     wx.showModal({
-      title: '确认清除',
-      content: '将清空本地购物车缓存，仅用于开发调试，确定继续吗？',
+      title: '确认退出',
+      content: '退出后需要重新登录商家账号，确认退出吗？',
       success: res => {
-        if (!res.confirm) {
-          return;
-        }
+        if (!res.confirm) return;
 
-        wx.removeStorageSync('cartItems');
+        const token = wx.getStorageSync('merchantToken') || '';
 
-        wx.showToast({
-          title: '已清除',
-          icon: 'success'
+        wx.request({
+          url: `${BASE_URL}/api/merchant/logout`,
+          method: 'POST',
+          header: {
+            'Authorization': `Bearer ${token}`
+          },
+          success: res => {
+            console.log('商家退出登录返回：', res.data);
+
+            wx.removeStorageSync('merchantLoggedIn');
+            wx.removeStorageSync('merchantToken');
+            wx.removeStorageSync('merchantUsername');
+
+            wx.showToast({
+              title: '已退出登录',
+              icon: 'success'
+            });
+
+            setTimeout(() => {
+              wx.reLaunch({
+                url: '/pages/merchant-login/merchant-login'
+              });
+            }, 800);
+          },
+          fail: err => {
+            console.error('商家退出登录失败：', err);
+
+            wx.removeStorageSync('merchantLoggedIn');
+            wx.removeStorageSync('merchantToken');
+            wx.removeStorageSync('merchantUsername');
+
+            wx.showToast({
+              title: '本地已退出',
+              icon: 'none'
+            });
+
+            setTimeout(() => {
+              wx.reLaunch({
+                url: '/pages/merchant-login/merchant-login'
+              });
+            }, 800);
+          }
         });
       }
-    });
-  },
-
-  showAbout() {
-    wx.showModal({
-      title: '关于乐然便利',
-      content: '乐然便利线上小铺，当前版本已接入 C++ 后端与 SQLite 数据库。',
-      showCancel: false
     });
   }
 });
