@@ -19,9 +19,9 @@ Page({
 
   loadOrders() {
     const token = wx.getStorageSync('merchantToken') || '';
-
+    const { BASE_URL } = require('../../utils/config');
     wx.request({
-      url: 'http://localhost:5555/api/merchant/orders',
+      url: `${BASE_URL}/api/merchant/orders`,
       method: 'GET',
       header: {
         'Authorization': `Bearer ${token}`
@@ -68,9 +68,9 @@ Page({
 
   updateOrderStatus(orderId, status) {
     const token = wx.getStorageSync('merchantToken') || '';
-
+    const { BASE_URL } = require('../../utils/config');
     wx.request({
-      url: `http://localhost:5555/api/orders/${orderId}/status`,
+      url: `${BASE_URL}/api/orders/${orderId}/status`,
       method: 'PATCH',
       header: {
         'Content-Type': 'application/json',

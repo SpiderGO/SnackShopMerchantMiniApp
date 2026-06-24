@@ -26,9 +26,10 @@ Page({
 
   loadProducts() {
     const token = wx.getStorageSync('merchantToken') || '';
-  
+    const { BASE_URL } = require('../../utils/config');
+
     wx.request({
-      url: 'http://localhost:5555/api/merchant/products',
+      url: `${BASE_URL}/api/merchant/products`,
       method: 'GET',
       header: {
         'Authorization': `Bearer ${token}`
@@ -85,7 +86,7 @@ Page({
   saveStock(event) {
     const index = event.currentTarget.dataset.index;
     const product = this.data.products[index];
-
+    const { BASE_URL } = require('../../utils/config');
     const stock = parseInt(product.editStock, 10);
 
     if (Number.isNaN(stock) || stock < 0) {
@@ -97,7 +98,7 @@ Page({
     }
 
     wx.request({
-      url: `http://localhost:5555/api/products/${product.id}/stock`,
+      url: `${BASE_URL}/api/products/${product.id}/stock`,
       method: 'PATCH',
       header: {
         'Content-Type': 'application/json',
@@ -150,7 +151,7 @@ Page({
 
   createProduct() {
     const { name, category, price, stock } = this.data.newProduct;
-
+    const { BASE_URL } = require('../../utils/config');
     const priceNumber = parseFloat(price);
     const stockNumber = parseInt(stock, 10);
 
@@ -179,7 +180,7 @@ Page({
     }
 
     wx.request({
-      url: 'http://localhost:5555/api/products',
+      url: `${BASE_URL}/api/merchant/products`,
       method: 'POST',
       header: {
         'Content-Type': 'application/json',
@@ -231,11 +232,11 @@ Page({
   toggleEnabled(event) {
     const index = event.currentTarget.dataset.index;
     const product = this.data.products[index];
-  
+    const { BASE_URL } = require('../../utils/config');
     const newEnabled = !product.enabled;
   
     wx.request({
-      url: `http://localhost:5555/api/products/${product.id}/enabled`,
+      url: `${BASE_URL}/api/products/${product.id}/enabled`,
       method: 'PATCH',
       header: {
         'Content-Type': 'application/json',

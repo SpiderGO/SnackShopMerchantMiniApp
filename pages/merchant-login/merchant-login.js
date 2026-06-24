@@ -18,7 +18,7 @@ Page({
 
   login() {
     const { username, password } = this.data;
-  
+    const { BASE_URL } = require('../../utils/config');
     if (!username.trim() || !password.trim()) {
       wx.showToast({
         title: '请输入账号和密码',
@@ -28,7 +28,7 @@ Page({
     }
   
     wx.request({
-      url: 'http://localhost:5555/api/merchant/login',
+      url: `${BASE_URL}/api/merchant/login`,
       method: 'POST',
       header: {
         'Content-Type': 'application/json'
