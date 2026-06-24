@@ -1,0 +1,86 @@
+.entry-page {
+  min-height: 100vh;
+  background: linear-gradient(180deg, #d81e06 0%, #ef3b2d 42%, #f7f7f7 42%, #f7f7f7 100%);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  box-sizing: border-box;
+}
+
+.top-area {
+  width: 100%;
+  padding-top: 120rpx;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.logo-img {
+  width: 180rpx;
+  height: 180rpx;
+  border-radius: 12rpx;
+  background-color: transparent;
+  padding: 0;
+  box-sizing: border-box;
+  margin-bottom: 36rpx;
+  box-shadow: none;
+}
+
+.title {
+  color: #ffffff;
+  font-size: 50rpx;
+  font-weight: 700;
+  margin-bottom: 16rpx;
+}
+
+.subtitle {
+  color: rgba(255, 255, 255, 0.92);
+  font-size: 28rpx;
+}
+
+.bottom-card {
+  width: 88%;
+  margin-top: 80rpx;
+  background-color: #ffffff;
+  border-radius: 28rpx;
+  padding: 50rpx 36rpx 56rpx;
+  box-sizing: border-box;
+  box-shadow: 0 12rpx 30rpx rgba(0, 0, 0, 0.08);
+}
+
+.welcome-text {
+  text-align: center;
+  font-size: 34rpx;
+  font-weight: 700;
+  color: #333333;
+  margin-bottom: 18rpx;
+}
+
+.welcome-desc {
+  text-align: center;
+  font-size: 26rpx;
+  color: #888888;
+  margin-bottom: 60rpx;
+}
+
+.enter-btn {
+  width: 420rpx;
+  height: 88rpx;
+  border-radius: 44rpx;
+  background: linear-gradient(90deg, #d81e06, #ef3b2d);
+  color: #ffffff;
+  font-size: 32rpx;
+  font-weight: 700;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  padding: 0;
+  line-height: normal;
+  margin: 0 auto;
+}
+
+.enter-btn::after {
+  border: none;
+}

@@ -1,0 +1,14 @@
+<view class="entry-page">
+  <view class="top-area">
+    <image class="logo-img" src="/images/logo.jpg" mode="aspectFit"></image>
+    <view class="title">乐然便利</view>
+    <view class="subtitle">附近零食饮料 · 下单自提更方便</view>
+  </view>
+
+  <view class="bottom-card">
+    <view class="welcome-text">欢迎来到乐然便利线上小铺</view>
+    <view class="welcome-desc">零食 / 饮料 / 日用品，一键下单更省心</view>
+
+    <button class="enter-btn" bindtap="enterShop">进入小铺</button>
+  </view>
+</view>

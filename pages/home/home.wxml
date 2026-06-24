@@ -1,0 +1,32 @@
+<view class="container">
+  <view class="store-card">
+    <view class="store-header">
+      <image class="store-logo" src="/images/logo.jpg" mode="aspectFill"></image>
+
+      <view class="store-info">
+        <view class="store-name">乐然便利</view>
+        <view class="store-desc">零食 · 饮料 · 日用 · 到店自提</view>
+      </view>
+    </view>
+  </view>
+
+  <view class="section-row">
+    <view class="section-title">推荐商品</view>
+    <view class="section-tag">热卖</view>
+  </view>
+
+  <view class="product-card" wx:for="{{products}}" wx:key="id">
+    <view class="product-left">
+      <view class="product-name">{{item.name}}</view>
+      <view class="product-category">{{item.category}}</view>
+      <view class="product-stock">库存：{{item.stock}}</view>
+    </view>
+
+    <view class="product-right">
+      <view class="price">￥{{item.price}}</view>
+      <button class="add-btn" size="mini" bindtap="addToCart" data-id="{{item.id}}">
+        加入
+      </button>
+    </view>
+  </view>
+</view>

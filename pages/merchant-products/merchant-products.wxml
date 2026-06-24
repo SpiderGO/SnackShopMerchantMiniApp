@@ -1,0 +1,104 @@
+<view class="product-manage-page">
+  <view class="page-title">商品管理</view>
+
+  <view class="form-card">
+    <view class="form-title">新增商品</view>
+
+    <input
+      class="input"
+      placeholder="商品名称，例如：矿泉水"
+      value="{{newProduct.name}}"
+      data-field="name"
+      bindinput="onNewProductInput"
+    />
+
+    <input
+      class="input"
+      placeholder="商品分类，例如：饮料"
+      value="{{newProduct.category}}"
+      data-field="category"
+      bindinput="onNewProductInput"
+    />
+
+    <input
+      class="input"
+      type="digit"
+      placeholder="价格，例如：2.5"
+      value="{{newProduct.price}}"
+      data-field="price"
+      bindinput="onNewProductInput"
+    />
+
+    <input
+      class="input"
+      type="number"
+      placeholder="库存数量，例如：80"
+      value="{{newProduct.stock}}"
+      data-field="stock"
+      bindinput="onNewProductInput"
+    />
+
+    <button class="create-btn" bindtap="createProduct">新增商品</button>
+  </view>
+
+  <view class="section-title">已有商品</view>
+
+  <view wx:if="{{products.length === 0}}" class="empty-box">
+    <view class="empty-title">暂无商品</view>
+    <view class="empty-desc">可以先新增一个商品</view>
+  </view>
+
+  <view wx:else>
+    <view class="product-card" wx:for="{{products}}" wx:key="id">
+      <view class="product-info">
+        <view class="product-name">{{item.name}}</view>
+        <view class="product-category">{{item.category}}</view>
+        <view class="product-price">￥{{item.price}}</view>
+
+        <view wx:if="{{item.enabled}}" class="enabled-tag">已上架</view>
+        <view wx:else class="disabled-tag">已下架</view>
+      </view>
+
+      <view class="stock-area">
+        <view class="stock-label">库存</view>
+
+        <input
+          class="stock-input"
+          type="number"
+          value="{{item.editStock}}"
+          data-index="{{index}}"
+          bindinput="onStockInput"
+        />
+
+        <button
+          class="save-btn"
+          size="mini"
+          data-index="{{index}}"
+          bindtap="saveStock"
+        >
+          保存
+        </button>
+
+        <button
+          wx:if="{{item.enabled}}"
+          class="offline-btn"
+          size="mini"
+          data-index="{{index}}"
+          bindtap="toggleEnabled"
+        >
+          下架
+        </button>
+
+        <button
+          wx:else
+          class="online-btn"
+          size="mini"
+          data-index="{{index}}"
+          bindtap="toggleEnabled"
+        >
+          上架
+        </button>
+      </view>
+    </view>
+  </view>
+</view>

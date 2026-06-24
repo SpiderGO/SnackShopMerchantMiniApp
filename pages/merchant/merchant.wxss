@@ -1,0 +1,154 @@
+.merchant-page {
+  min-height: 100vh;
+  background-color: #f7f7f7;
+  padding: 28rpx;
+  box-sizing: border-box;
+}
+
+.page-title {
+  font-size: 38rpx;
+  font-weight: 700;
+  color: #333333;
+  margin-bottom: 28rpx;
+}
+
+.empty-box {
+  padding-top: 220rpx;
+  text-align: center;
+}
+
+.empty-title {
+  font-size: 34rpx;
+  font-weight: 700;
+  color: #333333;
+  margin-bottom: 16rpx;
+}
+
+.empty-desc {
+  font-size: 26rpx;
+  color: #999999;
+}
+
+.order-card {
+  background-color: #ffffff;
+  border-radius: 22rpx;
+  padding: 28rpx;
+  margin-bottom: 22rpx;
+  box-sizing: border-box;
+  box-shadow: 0 6rpx 18rpx rgba(0, 0, 0, 0.04);
+}
+
+.order-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 16rpx;
+}
+
+.order-id {
+  font-size: 24rpx;
+  color: #666666;
+  margin-bottom: 8rpx;
+}
+
+.order-time {
+  font-size: 24rpx;
+  color: #999999;
+}
+
+.status {
+  color: #d81e06;
+  font-size: 26rpx;
+  font-weight: 700;
+  background-color: #fff1eb;
+  padding: 6rpx 16rpx;
+  border-radius: 24rpx;
+}
+
+.pickup-type {
+  color: #666666;
+  font-size: 26rpx;
+  margin-bottom: 18rpx;
+}
+
+.product-list {
+  border-top: 1rpx solid #eeeeee;
+  border-bottom: 1rpx solid #eeeeee;
+  padding: 18rpx 0;
+}
+
+.product-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 14rpx;
+}
+
+.product-row:last-child {
+  margin-bottom: 0;
+}
+
+.product-name {
+  font-size: 30rpx;
+  color: #333333;
+  font-weight: 600;
+}
+
+.product-quantity {
+  color: #666666;
+  font-size: 28rpx;
+}
+
+.order-bottom {
+  margin-top: 18rpx;
+  display: flex;
+  justify-content: flex-end;
+}
+
+.total {
+  color: #d81e06;
+  font-size: 32rpx;
+  font-weight: 700;
+}
+
+.action-row {
+  margin-top: 24rpx;
+  display: flex;
+  justify-content: flex-end;
+}
+
+.accept-btn,
+.complete-btn {
+  min-width: 180rpx;
+  height: 68rpx;
+  border-radius: 34rpx;
+  color: #ffffff;
+  font-size: 28rpx;
+  font-weight: 700;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  padding: 0;
+  line-height: normal;
+  margin: 0;
+}
+
+.accept-btn {
+  background: linear-gradient(90deg, #d81e06, #ef3b2d);
+}
+
+.complete-btn {
+  background: linear-gradient(90deg, #ff9f00, #ffbf33);
+}
+
+.accept-btn::after,
+.complete-btn::after {
+  border: none;
+}
+
+.done-text {
+  color: #999999;
+  font-size: 28rpx;
+}

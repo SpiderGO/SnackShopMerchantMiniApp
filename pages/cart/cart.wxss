@@ -1,0 +1,161 @@
+.cart-page {
+  min-height: 100vh;
+  background-color: #f7f7f7;
+  padding: 28rpx 28rpx 160rpx;
+  box-sizing: border-box;
+}
+
+.empty-box {
+  padding-top: 220rpx;
+  text-align: center;
+}
+
+.empty-title {
+  font-size: 34rpx;
+  font-weight: 700;
+  color: #333333;
+  margin-bottom: 16rpx;
+}
+
+.empty-desc {
+  font-size: 26rpx;
+  color: #999999;
+}
+
+.cart-title {
+  font-size: 38rpx;
+  font-weight: 700;
+  margin-bottom: 28rpx;
+  color: #333333;
+}
+
+.cart-card {
+  background-color: #ffffff;
+  border-radius: 22rpx;
+  padding: 28rpx;
+  margin-bottom: 22rpx;
+  box-sizing: border-box;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  box-shadow: 0 6rpx 18rpx rgba(0, 0, 0, 0.04);
+}
+
+.cart-info {
+  flex: 1;
+}
+
+.cart-name {
+  font-size: 34rpx;
+  font-weight: 700;
+  color: #222222;
+  margin-bottom: 10rpx;
+}
+
+.cart-category {
+  font-size: 26rpx;
+  color: #777777;
+  margin-bottom: 10rpx;
+}
+
+.cart-price {
+  font-size: 30rpx;
+  color: #d81e06;
+  font-weight: 700;
+}
+
+.quantity-box {
+  display: flex;
+  align-items: center;
+}
+
+.quantity-btn {
+  width: 56rpx;
+  height: 56rpx;
+  line-height: 56rpx;
+  padding: 0;
+  border-radius: 28rpx;
+  background-color: #f2f2f2;
+  color: #333333;
+  font-size: 30rpx;
+}
+
+.quantity-btn::after {
+  border: none;
+}
+
+.quantity {
+  width: 70rpx;
+  text-align: center;
+  font-size: 30rpx;
+  font-weight: 600;
+}
+
+.bottom-bar {
+  position: fixed;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: #ffffff;
+  padding: 20rpx 28rpx 34rpx;
+  box-sizing: border-box;
+  display: flex;
+  align-items: center;
+  gap: 18rpx;
+  box-shadow: 0 -6rpx 20rpx rgba(0, 0, 0, 0.06);
+}
+
+.total-label {
+  font-size: 24rpx;
+  color: #999999;
+}
+
+.total-price {
+  font-size: 34rpx;
+  color: #d81e06;
+  font-weight: 700;
+}
+
+.clear-btn {
+  width: 180rpx;
+  height: 72rpx;
+  border-radius: 36rpx;
+  background-color: #f3f3f3;
+  color: #666666;
+  font-size: 28rpx;
+  font-weight: 600;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  padding: 0;
+  line-height: normal;
+  margin: 0;
+}
+
+.clear-btn::after {
+  border: none;
+}
+
+.submit-btn {
+  flex: 1;
+  height: 72rpx;
+  border-radius: 36rpx;
+  background: linear-gradient(90deg, #d81e06, #ef3b2d);
+  color: #ffffff;
+  font-size: 28rpx;
+  font-weight: 700;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  padding: 0;
+  line-height: normal;
+  margin: 0;
+}
+
+.submit-btn::after {
+  border: none;
+}

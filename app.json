@@ -1,0 +1,31 @@
+{
+  "pages": [
+    "pages/merchant-login/merchant-login",
+    "pages/merchant/merchant",
+    "pages/merchant-products/merchant-products"
+  ],
+  "window": {
+    "navigationBarTitleText": "乐然便利商家端",
+    "navigationBarBackgroundColor": "#d81e06",
+    "navigationBarTextStyle": "white",
+    "backgroundColor": "#f7f7f7"
+  },
+  "tabBar": {
+    "color": "#888888",
+    "selectedColor": "#d81e06",
+    "backgroundColor": "#ffffff",
+    "borderStyle": "black",
+    "list": [
+      {
+        "pagePath": "pages/merchant/merchant",
+        "text": "订单"
+      },
+      {
+        "pagePath": "pages/merchant-products/merchant-products",
+        "text": "商品"
+      }
+    ]
+  },
+  "style": "v2",
+  "sitemapLocation": "sitemap.json"
+}

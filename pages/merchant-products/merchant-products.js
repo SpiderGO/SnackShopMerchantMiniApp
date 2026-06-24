@@ -1,0 +1,255 @@
+Page({
+  data: {
+    products: [],
+
+    newProduct: {
+      name: '',
+      category: '',
+      price: '',
+      stock: ''
+    }
+  },
+
+  onShow() {
+    const merchantLoggedIn = wx.getStorageSync('merchantLoggedIn') || false;
+  
+    if (!merchantLoggedIn) {
+      wx.reLaunch({
+        url: '/pages/merchant-login/merchant-login'
+      });
+      return;
+    }
+  
+    this.loadProducts();
+  },
+
+  loadProducts() {
+    wx.request({
+      url: 'http://localhost:5555/api/merchant/products',
+      method: 'GET',
+      success: res => {
+        console.log('商品管理商品列表：', res.data);
+
+        if (res.data.code === 0) {
+          const products = res.data.data.map(item => {
+            return {
+              ...item,
+              editStock: String(item.stock)
+            };
+          });
+
+          this.setData({
+            products
+          });
+        } else {
+          wx.showToast({
+            title: '商品加载失败',
+            icon: 'none'
+          });
+        }
+      },
+      fail: err => {
+        console.error('商品加载失败：', err);
+
+        wx.showToast({
+          title: '无法连接后端',
+          icon: 'none'
+        });
+      }
+    });
+  },
+
+  onStockInput(event) {
+    const index = event.currentTarget.dataset.index;
+    const value = event.detail.value;
+
+    const products = this.data.products;
+    products[index].editStock = value;
+
+    this.setData({
+      products
+    });
+  },
+
+  saveStock(event) {
+    const index = event.currentTarget.dataset.index;
+    const product = this.data.products[index];
+
+    const stock = parseInt(product.editStock, 10);
+
+    if (Number.isNaN(stock) || stock < 0) {
+      wx.showToast({
+        title: '库存数量不合法',
+        icon: 'none'
+      });
+      return;
+    }
+
+    wx.request({
+      url: `http://localhost:5555/api/products/${product.id}/stock`,
+      method: 'PATCH',
+      header: {
+        'Content-Type': 'application/json'
+      },
+      data: {
+        stock
+      },
+      success: res => {
+        console.log('库存更新返回：', res.data);
+
+        if (res.data.code === 0) {
+          wx.showToast({
+            title: '库存已更新',
+            icon: 'success'
+          });
+
+          this.loadProducts();
+        } else {
+          wx.showToast({
+            title: res.data.message || '更新失败',
+            icon: 'none'
+          });
+        }
+      },
+      fail: err => {
+        console.error('库存更新失败：', err);
+
+        wx.showToast({
+          title: '无法连接后端',
+          icon: 'none'
+        });
+      }
+    });
+  },
+
+  onNewProductInput(event) {
+    const field = event.currentTarget.dataset.field;
+    const value = event.detail.value;
+
+    this.setData({
+      [`newProduct.${field}`]: value
+    });
+  },
+
+  createProduct() {
+    const { name, category, price, stock } = this.data.newProduct;
+
+    const priceNumber = parseFloat(price);
+    const stockNumber = parseInt(stock, 10);
+
+    if (!name.trim() || !category.trim()) {
+      wx.showToast({
+        title: '请填写商品名称和分类',
+        icon: 'none'
+      });
+      return;
+    }
+
+    if (Number.isNaN(priceNumber) || priceNumber < 0) {
+      wx.showToast({
+        title: '价格不合法',
+        icon: 'none'
+      });
+      return;
+    }
+
+    if (Number.isNaN(stockNumber) || stockNumber < 0) {
+      wx.showToast({
+        title: '库存不合法',
+        icon: 'none'
+      });
+      return;
+    }
+
+    wx.request({
+      url: 'http://localhost:5555/api/products',
+      method: 'POST',
+      header: {
+        'Content-Type': 'application/json'
+      },
+      data: {
+        name: name.trim(),
+        category: category.trim(),
+        price: priceNumber,
+        stock: stockNumber
+      },
+      success: res => {
+        console.log('新增商品返回：', res.data);
+
+        if (res.data.code === 0) {
+          wx.showToast({
+            title: '商品已新增',
+            icon: 'success'
+          });
+
+          this.setData({
+            newProduct: {
+              name: '',
+              category: '',
+              price: '',
+              stock: ''
+            }
+          });
+
+          this.loadProducts();
+        } else {
+          wx.showToast({
+            title: res.data.message || '新增失败',
+            icon: 'none'
+          });
+        }
+      },
+      fail: err => {
+        console.error('新增商品失败：', err);
+
+        wx.showToast({
+          title: '无法连接后端',
+          icon: 'none'
+        });
+      }
+    });
+  },
+
+  toggleEnabled(event) {
+    const index = event.currentTarget.dataset.index;
+    const product = this.data.products[index];
+  
+    const newEnabled = !product.enabled;
+  
+    wx.request({
+      url: `http://localhost:5555/api/products/${product.id}/enabled`,
+      method: 'PATCH',
+      header: {
+        'Content-Type': 'application/json'
+      },
+      data: {
+        enabled: newEnabled
+      },
+      success: res => {
+        console.log('上下架更新返回：', res.data);
+  
+        if (res.data.code === 0) {
+          wx.showToast({
+            title: newEnabled ? '已上架' : '已下架',
+            icon: 'success'
+          });
+  
+          this.loadProducts();
+        } else {
+          wx.showToast({
+            title: res.data.message || '操作失败',
+            icon: 'none'
+          });
+        }
+      },
+      fail: err => {
+        console.error('上下架失败：', err);
+  
+        wx.showToast({
+          title: '无法连接后端',
+          icon: 'none'
+        });
+      }
+    });
+  }
+});

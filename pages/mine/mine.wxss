@@ -1,0 +1,67 @@
+.mine-page {
+  min-height: 100vh;
+  background-color: #f7f7f7;
+  padding: 28rpx;
+  box-sizing: border-box;
+}
+
+.user-card {
+  background: linear-gradient(135deg, #d81e06, #ef3b2d);
+  border-radius: 24rpx;
+  padding: 32rpx;
+  display: flex;
+  align-items: center;
+  margin-bottom: 28rpx;
+  box-shadow: 0 8rpx 20rpx rgba(216, 30, 6, 0.18);
+}
+
+.user-logo {
+  width: 110rpx;
+  height: 110rpx;
+  border-radius: 18rpx;
+  margin-right: 24rpx;
+}
+
+.user-info {
+  flex: 1;
+}
+
+.nickname {
+  color: #ffffff;
+  font-size: 36rpx;
+  font-weight: 700;
+  margin-bottom: 10rpx;
+}
+
+.role {
+  color: rgba(255, 255, 255, 0.9);
+  font-size: 26rpx;
+}
+
+.menu-card {
+  background-color: #ffffff;
+  border-radius: 22rpx;
+  overflow: hidden;
+  box-shadow: 0 6rpx 18rpx rgba(0, 0, 0, 0.04);
+}
+
+.menu-item {
+  height: 100rpx;
+  padding: 0 28rpx;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  font-size: 30rpx;
+  color: #333333;
+  border-bottom: 1rpx solid #eeeeee;
+  box-sizing: border-box;
+}
+
+.menu-item:last-child {
+  border-bottom: none;
+}
+
+.arrow {
+  color: #bbbbbb;
+  font-size: 42rpx;
+}

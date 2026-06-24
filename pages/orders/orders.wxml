@@ -1,0 +1,38 @@
+<view class="orders-page">
+  <view wx:if="{{orders.length === 0}}" class="empty-box">
+    <view class="empty-title">暂无订单</view>
+    <view class="empty-desc">提交订单后会显示在这里</view>
+  </view>
+
+  <view wx:else>
+    <view class="orders-title">我的订单</view>
+
+    <view class="order-card" wx:for="{{orders}}" wx:key="id">
+      <view class="order-header">
+        <view class="order-id">订单号：{{item.id}}</view>
+        <view class="order-status">{{item.status}}</view>
+      </view>
+
+      <view class="order-meta">
+        <view>{{item.createdAt}}</view>
+        <view>{{item.pickupType}}</view>
+      </view>
+
+      <view class="product-list">
+        <view
+          class="order-product"
+          wx:for="{{item.items}}"
+          wx:for-item="product"
+          wx:key="id"
+        >
+          <view class="product-name">{{product.name}}</view>
+          <view class="product-count">× {{product.quantity}}</view>
+        </view>
+      </view>
+
+      <view class="order-footer">
+        <view class="order-total">合计：￥{{item.totalAmount}}</view>
+      </view>
+    </view>
+  </view>
+</view>

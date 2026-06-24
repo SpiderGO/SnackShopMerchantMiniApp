@@ -1,0 +1,25 @@
+<view class="login-page">
+  <view class="login-card">
+    <image class="logo" src="/images/logo.jpg" mode="aspectFill"></image>
+
+    <view class="title">商家登录</view>
+    <view class="desc">仅门店商家可进入后台管理</view>
+
+    <input
+      class="input"
+      placeholder="请输入商家账号"
+      value="{{username}}"
+      bindinput="onUsernameInput"
+    />
+
+    <input
+      class="input"
+      password
+      placeholder="请输入商家密码"
+      value="{{password}}"
+      bindinput="onPasswordInput"
+    />
+
+    <button class="login-btn" bindtap="login">登录</button>
+  </view>
+</view>
