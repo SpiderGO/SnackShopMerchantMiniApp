@@ -5,23 +5,34 @@ Page({
 
   onShow() {
     const merchantLoggedIn = wx.getStorageSync('merchantLoggedIn') || false;
-  
-    if (!merchantLoggedIn) {
+    const merchantToken = wx.getStorageSync('merchantToken') || '';
+
+    if (!merchantLoggedIn || !merchantToken) {
       wx.reLaunch({
         url: '/pages/merchant-login/merchant-login'
       });
       return;
     }
-  
+
     this.loadOrders();
   },
 
   loadOrders() {
+    const token = wx.getStorageSync('merchantToken') || '';
+
     wx.request({
-      url: 'http://localhost:5555/api/orders',
+      url: 'http://localhost:5555/api/merchant/orders',
       method: 'GET',
+      header: {
+        'Authorization': `Bearer ${token}`
+      },
       success: res => {
         console.log('商家订单接口返回：', res.data);
+
+        if (res.statusCode === 401) {
+          this.handleUnauthorized();
+          return;
+        }
 
         if (res.data.code === 0) {
           this.setData({
@@ -29,7 +40,7 @@ Page({
           });
         } else {
           wx.showToast({
-            title: '订单加载失败',
+            title: res.data.message || '订单加载失败',
             icon: 'none'
           });
         }
@@ -56,17 +67,25 @@ Page({
   },
 
   updateOrderStatus(orderId, status) {
+    const token = wx.getStorageSync('merchantToken') || '';
+
     wx.request({
       url: `http://localhost:5555/api/orders/${orderId}/status`,
       method: 'PATCH',
       header: {
-        'Content-Type': 'application/json'
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${token}`
       },
       data: {
         status
       },
       success: res => {
         console.log('更新订单状态返回：', res.data);
+
+        if (res.statusCode === 401) {
+          this.handleUnauthorized();
+          return;
+        }
 
         if (res.data.code === 0) {
           wx.showToast({
@@ -91,5 +110,21 @@ Page({
         });
       }
     });
+  },
+
+  handleUnauthorized() {
+    wx.removeStorageSync('merchantLoggedIn');
+    wx.removeStorageSync('merchantToken');
+
+    wx.showToast({
+      title: '登录已失效',
+      icon: 'none'
+    });
+
+    setTimeout(() => {
+      wx.reLaunch({
+        url: '/pages/merchant-login/merchant-login'
+      });
+    }, 800);
   }
 });

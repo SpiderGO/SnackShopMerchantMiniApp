@@ -12,8 +12,9 @@ Page({
 
   onShow() {
     const merchantLoggedIn = wx.getStorageSync('merchantLoggedIn') || false;
+    const merchantToken = wx.getStorageSync('merchantToken') || '';
   
-    if (!merchantLoggedIn) {
+    if (!merchantLoggedIn || !merchantToken) {
       wx.reLaunch({
         url: '/pages/merchant-login/merchant-login'
       });
@@ -24,12 +25,22 @@ Page({
   },
 
   loadProducts() {
+    const token = wx.getStorageSync('merchantToken') || '';
+  
     wx.request({
       url: 'http://localhost:5555/api/merchant/products',
       method: 'GET',
+      header: {
+        'Authorization': `Bearer ${token}`
+      },
       success: res => {
         console.log('商品管理商品列表：', res.data);
-
+  
+        if (res.statusCode === 401) {
+          this.handleUnauthorized();
+          return;
+        }
+  
         if (res.data.code === 0) {
           const products = res.data.data.map(item => {
             return {
@@ -37,20 +48,20 @@ Page({
               editStock: String(item.stock)
             };
           });
-
+  
           this.setData({
             products
           });
         } else {
           wx.showToast({
-            title: '商品加载失败',
+            title: res.data.message || '商品加载失败',
             icon: 'none'
           });
         }
       },
       fail: err => {
         console.error('商品加载失败：', err);
-
+  
         wx.showToast({
           title: '无法连接后端',
           icon: 'none'
@@ -89,20 +100,26 @@ Page({
       url: `http://localhost:5555/api/products/${product.id}/stock`,
       method: 'PATCH',
       header: {
-        'Content-Type': 'application/json'
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${wx.getStorageSync('merchantToken') || ''}`
       },
       data: {
         stock
       },
       success: res => {
         console.log('库存更新返回：', res.data);
-
+    
+        if (res.statusCode === 401) {
+          this.handleUnauthorized();
+          return;
+        }
+    
         if (res.data.code === 0) {
           wx.showToast({
             title: '库存已更新',
             icon: 'success'
           });
-
+    
           this.loadProducts();
         } else {
           wx.showToast({
@@ -113,7 +130,7 @@ Page({
       },
       fail: err => {
         console.error('库存更新失败：', err);
-
+    
         wx.showToast({
           title: '无法连接后端',
           icon: 'none'
@@ -165,7 +182,8 @@ Page({
       url: 'http://localhost:5555/api/products',
       method: 'POST',
       header: {
-        'Content-Type': 'application/json'
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${wx.getStorageSync('merchantToken') || ''}`
       },
       data: {
         name: name.trim(),
@@ -220,7 +238,8 @@ Page({
       url: `http://localhost:5555/api/products/${product.id}/enabled`,
       method: 'PATCH',
       header: {
-        'Content-Type': 'application/json'
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${wx.getStorageSync('merchantToken') || ''}`
       },
       data: {
         enabled: newEnabled
@@ -251,5 +270,21 @@ Page({
         });
       }
     });
+  },
+
+  handleUnauthorized() {
+    wx.removeStorageSync('merchantLoggedIn');
+    wx.removeStorageSync('merchantToken');
+  
+    wx.showToast({
+      title: '登录已失效',
+      icon: 'none'
+    });
+  
+    setTimeout(() => {
+      wx.reLaunch({
+        url: '/pages/merchant-login/merchant-login'
+      });
+    }, 800);
   }
 });
