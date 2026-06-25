@@ -19,16 +19,21 @@
 
       <view class="pickup-type">{{item.pickupType}}</view>
 
+      <view class="customer-info">
+        <view>联系人：{{item.customerName}}</view>
+        <view>电话：{{item.customerPhone}}</view>
+        <view wx:if="{{item.remark}}">备注：{{item.remark}}</view>
+      </view>
+
       <view class="product-list">
-        <view
-          class="product-row"
-          wx:for="{{item.items}}"
-          wx:for-item="product"
-          wx:key="id"
-        >
+        <view class="product-item" wx:for="{{item.items}}" wx:for-item="product" wx:key="id">
+        <view class="product-main">
           <view class="product-name">{{product.name}}</view>
-          <view class="product-quantity">× {{product.quantity}}</view>
+          <view class="product-spec">口味：{{product.variantName || '默认'}}</view>
         </view>
+
+        <view class="product-count">× {{product.quantity}}</view>
+      </view>
       </view>
 
       <view class="order-bottom">
