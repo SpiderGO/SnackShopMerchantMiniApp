@@ -1,8 +1,38 @@
-<view class="product-manage-page">
+<view class="merchant-product-page">
   <view class="page-title">商品管理</view>
 
+  <view class="category-card">
+    <view class="card-title">分类管理</view>
+
+    <view class="category-create-row">
+      <input
+        class="category-input"
+        placeholder="新建分类，例如：饮料 / 辣味零食"
+        value="{{newCategoryName}}"
+        bindinput="onNewCategoryInput"
+      />
+
+      <button class="category-create-btn" bindtap="createCategory">
+        新建
+      </button>
+    </view>
+
+    <view class="category-chip-row">
+      <view
+        class="category-chip"
+        wx:for="{{categoryOptions}}"
+        wx:key="*this"
+        data-category="{{item}}"
+        bindtap="openCategoryAction"
+      >
+        <text class="category-chip-text">{{item}}</text>
+        <text class="category-chip-arrow">⌄</text>
+      </view>
+    </view>
+  </view>
+
   <view class="form-card">
-    <view class="form-title">新增商品</view>
+    <view class="card-title">新增商品</view>
 
     <input
       class="input"
@@ -12,18 +42,24 @@
       bindinput="onNewProductInput"
     />
 
-    <input
-      class="input"
-      placeholder="商品分类，例如：饮料"
-      value="{{newProduct.category}}"
-      data-field="category"
-      bindinput="onNewProductInput"
-    />
+    <view class="form-label">选择分类</view>
+
+    <view class="new-product-category-row">
+      <view
+        class="new-product-category {{newProduct.category === item ? 'new-product-category-active' : ''}}"
+        wx:for="{{categoryOptions}}"
+        wx:key="*this"
+        data-category="{{item}}"
+        bindtap="selectNewProductCategory"
+      >
+        {{item}}
+      </view>
+    </view>
 
     <input
       class="input"
       type="digit"
-      placeholder="价格，例如：2.5"
+      placeholder="默认价格，例如：2.5"
       value="{{newProduct.price}}"
       data-field="price"
       bindinput="onNewProductInput"
@@ -32,13 +68,15 @@
     <input
       class="input"
       type="number"
-      placeholder="库存数量，例如：80"
+      placeholder="默认库存，例如：80"
       value="{{newProduct.stock}}"
       data-field="stock"
       bindinput="onNewProductInput"
     />
 
-    <button class="create-btn" bindtap="createProduct">新增商品</button>
+    <button class="create-btn" bindtap="createProduct">
+      新增商品
+    </button>
   </view>
 
   <view class="section-title">已有商品</view>
@@ -48,57 +86,128 @@
     <view class="empty-desc">可以先新增一个商品</view>
   </view>
 
-  <view wx:else>
-    <view class="product-card" wx:for="{{products}}" wx:key="id">
-      <view class="product-info">
-        <view class="product-name">{{item.name}}</view>
-        <view class="product-category">{{item.category}}</view>
-        <view class="product-price">￥{{item.price}}</view>
+  <view wx:else class="product-layout">
+    <view class="category-sidebar">
+      <view
+        class="category-item {{selectedCategory === item ? 'active-category' : ''}}"
+        wx:for="{{categories}}"
+        wx:key="*this"
+        data-category="{{item}}"
+        bindtap="selectProductCategory"
+      >
+        {{item}}
+      </view>
+    </view>
 
-        <view wx:if="{{item.enabled}}" class="enabled-tag">已上架</view>
-        <view wx:else class="disabled-tag">已下架</view>
+    <view class="product-area">
+      <view wx:if="{{filteredProducts.length === 0}}" class="empty-category">
+        当前分类暂无商品
       </view>
 
-      <view class="stock-area">
-        <view class="stock-label">库存</view>
-
-        <input
-          class="stock-input"
-          type="number"
-          value="{{item.editStock}}"
-          data-index="{{index}}"
-          bindinput="onStockInput"
-        />
-
-        <button
-          class="save-btn"
-          size="mini"
-          data-index="{{index}}"
-          bindtap="saveStock"
+      <block wx:else>
+        <view
+          class="product-card"
+          wx:for="{{filteredProducts}}"
+          wx:key="id"
         >
-          保存
-        </button>
+          <view class="product-main">
+            <view class="product-header">
+              <view class="product-name">{{item.name}}</view>
 
-        <button
-          wx:if="{{item.enabled}}"
-          class="offline-btn"
-          size="mini"
-          data-index="{{index}}"
-          bindtap="toggleEnabled"
-        >
-          下架
-        </button>
+              <view wx:if="{{item.enabled}}" class="enabled-tag">已上架</view>
+              <view wx:else class="disabled-tag">已下架</view>
+            </view>
 
-        <button
-          wx:else
-          class="online-btn"
-          size="mini"
-          data-index="{{index}}"
-          bindtap="toggleEnabled"
-        >
-          上架
-        </button>
-      </view>
+            <view class="product-category">{{item.category}}</view>
+
+            <view class="product-meta">
+              <view class="product-price">￥{{item.price}}</view>
+              <view class="product-stock">总库存：{{item.stock}}</view>
+            </view>
+
+            <view class="product-variant-summary">
+              规格数：{{item.variants ? item.variants.length : 0}}
+            </view>
+          </view>
+
+          <view class="product-actions">
+            <button
+              class="edit-btn"
+              size="mini"
+              data-id="{{item.id}}"
+              bindtap="goProductEdit"
+            >
+              编辑
+            </button>
+
+            <button
+              wx:if="{{item.enabled}}"
+              class="offline-btn"
+              size="mini"
+              data-id="{{item.id}}"
+              bindtap="toggleEnabledById"
+            >
+              下架
+            </button>
+
+            <button
+              wx:else
+              class="online-btn"
+              size="mini"
+              data-id="{{item.id}}"
+              bindtap="toggleEnabledById"
+            >
+              上架
+            </button>
+          </view>
+        </view>
+      </block>
+    </view>
+  </view>
+
+  <view wx:if="{{categoryActionVisible}}" class="popup-mask" bindtap="closeCategoryAction"></view>
+
+  <view wx:if="{{categoryActionVisible}}" class="action-popup">
+    <view class="action-title">管理分类</view>
+    <view class="action-category-name">{{actionCategory}}</view>
+
+    <view class="action-item" bindtap="openRenameCategory">
+      修改分类名称
+    </view>
+
+    <view class="action-item danger-action" bindtap="deleteCategoryFromAction">
+      删除分类
+    </view>
+
+    <view class="action-cancel" bindtap="closeCategoryAction">
+      取消
+    </view>
+  </view>
+
+  <view wx:if="{{renameCategoryVisible}}" class="popup-mask" bindtap="closeRenameCategory"></view>
+
+  <view wx:if="{{renameCategoryVisible}}" class="rename-popup">
+    <view class="rename-title">修改分类名称</view>
+
+    <view class="rename-desc">
+      原分类：{{renameOldCategory}}
+    </view>
+
+    <input
+      class="rename-input"
+      placeholder="请输入新的分类名称"
+      value="{{renameNewCategory}}"
+      bindinput="onRenameCategoryInput"
+    />
+
+    <view class="rename-actions">
+      <button class="rename-cancel-btn" bindtap="closeRenameCategory">
+        取消
+      </button>
+
+      <button class="rename-confirm-btn" bindtap="submitRenameCategory">
+        确认修改
+      </button>
     </view>
   </view>
 </view>

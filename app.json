@@ -3,7 +3,8 @@
     "pages/merchant-login/merchant-login",
     "pages/merchant/merchant",
     "pages/merchant-products/merchant-products",
-    "pages/mine/mine"
+    "pages/mine/mine",
+    "pages/product-edit/product-edit"
   ],
   "window": {
     "navigationBarTitleText": "乐然便利商家端",

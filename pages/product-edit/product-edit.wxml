@@ -1,0 +1,229 @@
+<view class="edit-page">
+  <view wx:if="{{product}}" class="base-card">
+    <view class="page-title">编辑商品</view>
+
+    <view class="base-title">商品基础信息</view>
+
+    <view class="form-item">
+      <text class="form-label">商品名</text>
+      <input
+        class="form-input"
+        value="{{productForm.name}}"
+        placeholder="请输入商品名称"
+        bindinput="onProductNameInput"
+      />
+    </view>
+
+    <view class="form-item">
+      <text class="form-label">分类</text>
+
+      <picker
+        class="category-picker"
+        mode="selector"
+        range="{{categoryOptions}}"
+        bindchange="onProductCategoryChange"
+      >
+        <view class="picker-value {{productForm.category ? '' : 'picker-placeholder'}}">
+          {{productForm.category || '请选择分类'}}
+        </view>
+      </picker>
+    </view>
+
+    <view class="image-section">
+      <view class="image-label">商品主图</view>
+
+      <view class="upload-box" bindtap="uploadProductMainImage">
+        <image
+          wx:if="{{productForm.mainImageUrl}}"
+          class="upload-image"
+          src="{{productForm.mainImageUrl}}"
+          mode="aspectFill"
+        ></image>
+
+        <view wx:else class="upload-placeholder">
+          <view class="upload-plus">+</view>
+          <view class="upload-text">上传主图</view>
+        </view>
+      </view>
+    </view>
+
+    <view class="hint-text">
+      上传图片后，需要点击保存，才会写入数据库。
+    </view>
+
+    <button class="save-base-btn" bindtap="saveProductBase">
+      保存商品信息
+    </button>
+  </view>
+
+  <view wx:if="{{product}}" class="variant-card">
+    <view class="base-title">口味规格</view>
+
+    <view wx:if="{{variants.length === 0}}" class="empty-box">
+      暂无口味规格
+    </view>
+
+    <block wx:else>
+      <view
+        class="variant-item"
+        wx:for="{{variants}}"
+        wx:key="id"
+      >
+        <view class="variant-header">
+          <view class="variant-title">
+            规格 #{{index + 1}}
+          </view>
+
+          <view wx:if="{{item.enabled}}" class="enabled-tag">启用中</view>
+          <view wx:else class="disabled-tag">已冻结</view>
+        </view>
+
+        <view class="form-item">
+          <text class="form-label">口味</text>
+          <input
+            class="form-input"
+            value="{{item.editVariantName}}"
+            data-index="{{index}}"
+            data-field="editVariantName"
+            bindinput="onVariantInput"
+          />
+        </view>
+
+        <view class="form-item">
+          <text class="form-label">价格</text>
+          <input
+            class="form-input"
+            type="digit"
+            value="{{item.editPrice}}"
+            data-index="{{index}}"
+            data-field="editPrice"
+            bindinput="onVariantInput"
+          />
+        </view>
+
+        <view class="form-item">
+          <text class="form-label">库存</text>
+          <input
+            class="form-input"
+            type="number"
+            value="{{item.editStock}}"
+            data-index="{{index}}"
+            data-field="editStock"
+            bindinput="onVariantInput"
+          />
+        </view>
+
+        <view class="image-section">
+          <view class="image-label">口味图片</view>
+
+          <view
+            class="upload-box"
+            data-variant-id="{{item.id}}"
+            bindtap="uploadVariantImage"
+          >
+            <image
+              wx:if="{{item.editImageUrl}}"
+              class="upload-image"
+              src="{{item.editImageUrl}}"
+              mode="aspectFill"
+            ></image>
+
+            <view wx:else class="upload-placeholder">
+              <view class="upload-plus">+</view>
+              <view class="upload-text">上传图片</view>
+            </view>
+          </view>
+        </view>
+
+        <view class="variant-actions">
+          <button
+            class="save-variant-btn"
+            data-index="{{index}}"
+            bindtap="saveVariant"
+          >
+            保存
+          </button>
+
+          <button
+            wx:if="{{item.enabled}}"
+            class="freeze-btn"
+            data-index="{{index}}"
+            bindtap="toggleVariantEnabled"
+          >
+            冻结
+          </button>
+
+          <button
+            wx:else
+            class="enable-btn"
+            data-index="{{index}}"
+            bindtap="toggleVariantEnabled"
+          >
+            启用
+          </button>
+        </view>
+      </view>
+    </block>
+  </view>
+
+  <view wx:if="{{product}}" class="variant-card">
+    <view class="base-title">新增口味</view>
+
+    <view class="form-item">
+      <text class="form-label">口味</text>
+      <input
+        class="form-input"
+        placeholder="例如：柠檬味 / 原味 / 香辣味"
+        value="{{newVariant.variantName}}"
+        data-field="variantName"
+        bindinput="onNewVariantInput"
+      />
+    </view>
+
+    <view class="form-item">
+      <text class="form-label">价格</text>
+      <input
+        class="form-input"
+        type="digit"
+        placeholder="请输入价格"
+        value="{{newVariant.price}}"
+        data-field="price"
+        bindinput="onNewVariantInput"
+      />
+    </view>
+
+    <view class="form-item">
+      <text class="form-label">库存</text>
+      <input
+        class="form-input"
+        type="number"
+        placeholder="请输入库存"
+        value="{{newVariant.stock}}"
+        data-field="stock"
+        bindinput="onNewVariantInput"
+      />
+    </view>
+
+    <view class="image-section">
+      <view class="image-label">口味图片</view>
+
+      <view class="upload-box" bindtap="uploadNewVariantImage">
+        <image
+          wx:if="{{newVariant.imageUrl}}"
+          class="upload-image"
+          src="{{newVariant.imageUrl}}"
+          mode="aspectFill"
+        ></image>
+
+        <view wx:else class="upload-placeholder">
+          <view class="upload-plus">+</view>
+          <view class="upload-text">上传图片</view>
+        </view>
+      </view>
+    </view>
+
+    <button class="create-variant-btn" bindtap="createVariant">
+      新增口味
+    </button>
+  </view>
+</view>
